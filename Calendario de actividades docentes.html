@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario Académico Completo 2025</title>
+
+    <!-- CDN de FullCalendar v6 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css">
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/locales/es.global.min.js'></script>
+
+    <!-- CDN para html2pdf.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <style>
+        body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif; background-color: #f4f6f8; color: #212529; }
+        .page-header { background-color: #0b2952; color: white; padding: 15px 20px; text-align: center; margin-bottom: 20px; border-radius: 0 0 6px 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        #calendar-container { max-width: 900px; margin: 20px auto; background-color: white; padding: 20px; border-radius: 6px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .fc { border-radius: 6px; overflow: visible; }
+        .fc .fc-toolbar.fc-header-toolbar { margin-bottom: 1.5em; }
+        .fc .fc-button-primary { background-color: #0b6ef6; border-color: #0b6ef6; }
+        .fc-daygrid-event { white-space: normal !important; overflow: visible !important; align-items: start; padding: 1px 3px; font-size: 0.8em; border-radius: 3px; }
+        .fc-daygrid-day-frame { min-height: 100px; }
+        .fc-event.fc-event-evaluacion { border: 1px solid #7b1fa2 !important; color: white !important; }
+        .fc-event.fc-event-articulo { border: 1px solid #198754 !important; color: white !important; }
+        .fc-event.fc-event-caso { border: 1px solid #cca300 !important; color: #333 !important; }
+        .fc-event.fc-event-endocrino-u1 { border: 1px solid #2471a3 !important; color: white !important; }
+        .fc-event.fc-event-endocrino-u2 { border: 1px solid #ba4a00 !important; color: white !important; }
+        .fc-event.fc-event-endocrino-u3 { border: 1px solid #006064 !important; color: white !important; }
+        .fc-event.fc-event-clase-regular { border: 1px solid #4a5568 !important; color: white !important; }
+        .fc-event.fc-event-ultrasonido { border: 1px solid #067c74 !important; color: white !important; }
+        .fc-event.fc-event-atls { border: 1px solid #c0392b !important; color: white !important; }
+        .fc-event.nutricion { border: 2px dashed #667eea !important; }
+        #exportBtn { position: fixed; bottom: 20px; right: 20px; padding: 12px 24px; background-color: #198754; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 1000; }
+        #exportBtn:hover { background-color: #146c43; }
+        #exportBtn:disabled { background-color: #6c757d; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <div style="margin: 20px 0;">
+        <a href="curso-nutricion-index.html" style="padding: 10px 20px; background-color: #1976d2; color: white; text-decoration: none; border-radius: 5px;">← Volver al menú principal</a>
+    </div>
+
+    <header class="page-header">
+        <h1>Calendario Académico Completo – 2025</h1>
+    </header>
+
+    <div id="calendar-container">
+        <div id="calendar"></div>
+    </div>
+
+    <button id="exportBtn">Exportar a PDF</button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var exportButton = document.getElementById('exportBtn');
+
+            const colorEvaluacion = '#9c27b0', colorArticulo = '#28a745', colorCasoUCI = '#ffc107';
+            const colorEndocrinoU1 = '#2980b9', colorEndocrinoU2 = '#d35400', colorEndocrinoU3 = '#00838f';
+            const colorClaseRegular = '#718096', colorUltrasonido = '#089186', colorATLS = '#e74c3c';
+            const colorNutricion = '#667eea';
+
+            const eventosMayoJunio = [
+                // Clases Regulares
+                { id: 'ev1', title: 'Principios fisiológicos de ECG — Delgado/Suazo', start: '2025-05-02' },
+                { id: 'ev2', title: 'Choque hipovolémico — Delgado/Lopez', start: '2025-05-05' },
+                { id: 'ev3', title: 'Crecimiento cavidades/CIQ/bloqueos — Vanegas/Soza', start: '2025-05-06' },
+                { id: 'ev4', title: 'TCE severo — Vanegas/Lopez', start: '2025-05-07' },
+                { id: 'ev5', title: 'Bradi-/Taquiarritmias — Espinoza/Arauz', start: '2025-05-09' },
+                { id: 'ev6', title: 'Trauma raquimedular — Espinoza/Lopez', start: '2025-05-12' },
+                { id: 'ev7', title: 'Antiarritmicos — B. Mendoza/Flores', start: '2025-05-13' },
+                { id: 'ev8', title: 'Trauma tórax — B. Mendoza/Lopez', start: '2025-05-14' },
+                { id: 'ev9', title: 'BLS — Manzanarez/H. Suazo', start: '2025-05-16' },
+                { id: 'ev10', title: 'Trauma abd-pélvico — Manzanarez/Lopez', start: '2025-05-19' },
+                { id: 'ev11', title: 'ACLS RCP Teams — Altamirano/Soza', start: '2025-05-20' },
+                { id: 'ev12', title: 'Trauma osteomuscular — Altamirano/Lopez', start: '2025-05-21' },
+                { id: 'ev13', title: 'ACLS SNS & Cardio — Lopez/Arauz', start: '2025-05-23' },
+                { id: 'ev14', title: 'Quemaduras — Delgado/Lopez', start: '2025-05-26' },
+                { id: 'ev15', title: 'ACLS Vasoconst./Cronot. — Delgado/Flores', start: '2025-05-27' },
+                { id: 'ev16', title: 'ACLS Marcapaso/Cardiov./Desfibr. — Vanegas/H. Suazo', start: '2025-05-29' },
+                { id: 'ev18', title: 'RCP situaciones especiales — B. Mendoza/Soza', start: '2025-06-03' },
+                { id: 'ev19', title: 'Cuidados pos-parada — Manzanarez/Arauz', start: '2025-06-06' },
+                { id: 'ev20', title: 'Manejo vía aérea — Espinoza/Flores', start: '2025-06-10' },
+                { id: 'ev21', title: 'Dispositivos vía aérea — Altamirano/H. Suazo', start: '2025-06-13' },
+                { id: 'ev22', title: 'Laringoscopia & intubación — Lopez/Soza', start: '2025-06-17' },
+                { id: 'ev23', title: 'Vía aérea quirúrgica — Manzanarez/Arauz', start: '2025-06-20' },
+                // Evaluaciones
+                { id: 'ev17', title: 'Primera evaluación (Reanimación)', start: '2025-06-02', color: colorEvaluacion, classNames: ['fc-event-evaluacion'] }, // <-- MODIFICACIÓN: Nombre
+                { id: 'ev24', title: 'Segunda evaluación (Reanimación)', start: '2025-06-27', color: colorEvaluacion, classNames: ['fc-event-evaluacion'] }, // <-- MODIFICACIÓN: Nombre y Fecha
+                // Artículos
+                { id: 'art1', title: 'Artículo: Suazo - CPR Mecánica vs Manual', start: '2025-05-06', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art2', title: 'Artículo: Flores - Acceso IO vs IV', start: '2025-05-09', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art3', title: 'Artículo: Arauz - Vía Aérea Supraglótica vs IOT', start: '2025-05-13', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art4', title: 'Artículo: Soza - Desfibrilación Doble Sec.', start: '2025-05-16', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art5', title: 'Artículo: Lopez - Pqt. Politrauma', start: '2025-05-20', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art6', title: 'Artículo: Suazo - Intervalo Epinefrina', start: '2025-05-23', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art7', title: 'Artículo: Flores - Vaso + Esteroides (VSE)', start: '2025-05-27', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art8', title: 'Artículo: Dr. Lopez - Craniectomía Descomp. TBI', start: '2025-05-30', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art9', title: 'Artículo: Arauz - E-CPR vs Convencional', start: '2025-06-03', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art10', title: 'Artículo: Soza - Duración RCP & Resultados', start: '2025-06-06', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art11', title: 'Artículo: Suazo - Videolar. vs Directa', start: '2025-06-10', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art12', title: 'Artículo: Flores - TTM Update', start: '2025-06-13', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art13', title: 'Artículo: Arauz - Network-Meta Epinefrina', start: '2025-06-17', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art14', title: 'Artículo: Soza - Torniquete Prehosp.', start: '2025-06-20', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art15', title: 'Artículo: Lopez - Revisión de artículo', start: '2025-06-27', color: colorArticulo, classNames: ['fc-event-articulo'] }, // <-- MODIFICACIÓN: Fecha
+                // Casos UCI
+                { id: 'caso1', title: 'Caso UCI: Lopez', start: '2025-05-12', color: colorCasoUCI, classNames: ['fc-event-caso'] },
+                { id: 'caso2', title: 'Caso UCI: Suazo', start: '2025-05-19', color: colorCasoUCI, classNames: ['fc-event-caso'] },
+                { id: 'caso3', title: 'Caso UCI: Flores', start: '2025-05-26', color: colorCasoUCI, classNames: ['fc-event-caso'] },
+                { id: 'caso4', title: 'Caso UCI: Arauz', start: '2025-06-04', color: colorCasoUCI, classNames: ['fc-event-caso'] },
+                { id: 'caso5', title: 'Caso UCI: Soza', start: '2025-06-09', color: colorCasoUCI, classNames: ['fc-event-caso'] },
+                { id: 'caso7', title: 'Caso UCI: Suazo', start: '2025-06-23', color: colorCasoUCI, classNames: ['fc-event-caso'] },
+                { id: 'caso6_moved', title: 'Caso UCI: Lopez', start: '2025-07-01', color: colorCasoUCI, classNames: ['fc-event-caso'] },
+            ];
+            
+            const clasesEndocrino = [
+                { fecha: '2025-06-16', docente: 'Dr. Vanegas', sindrome: 'Trastornos Hipofisarios Agudos' },
+                { fecha: '2025-06-19', docente: 'Dr. Mendoza', sindrome: 'Trastornos del Agua: SIHAD e Insípida' },
+                { fecha: '2025-06-23', docente: 'Dr. Espinoza', sindrome: 'Crisis Hiperglucémicas y Hipoglucemia Grave' },
+                { fecha: '2025-06-26', docente: 'Dr. Manzanarez', sindrome: 'Insuficiencia Adrenal Aguda' },
+                { fecha: '2025-06-30', docente: 'Dr. Delgado', sindrome: 'Síndromes Tiroideos del Paciente Grave' },
+                { fecha: '2025-07-03', docente: 'Dr. Altamirano', sindrome: 'Emergencias Tiroideas' },
+                { fecha: '2025-07-07', docente: 'Dr. Vanegas', sindrome: 'Síndromes Metabólicos Complejos y Perioperatorio' }
+            ];
+
+            const eventosEndocrino = clasesEndocrino.map((clase, index) => {
+                let color, className;
+                if (clase.sindrome.includes('Hipofisarios') || clase.sindrome.includes('del Agua')) { color = colorEndocrinoU1; className = 'fc-event-endocrino-u1'; }
+                else if (clase.sindrome.includes('Hiperglucémicas') || clase.sindrome.includes('Adrenal') || clase.sindrome.includes('Metabólicos')) { color = colorEndocrinoU2; className = 'fc-event-endocrino-u2'; }
+                else if (clase.sindrome.includes('Tiroideas') || clase.sindrome.includes('Tiroideos')) { color = colorEndocrinoU3; className = 'fc-event-endocrino-u3'; }
+                return { id: `endo${index}`, title: `${clase.sindrome} — ${clase.docente}/Lopez`, start: clase.fecha, color: color, classNames: [className] };
+            });
+
+            const eventosCursoGrave = [
+                { id: 'cg1', title: 'Criterios ingreso UCI — Flores/Altamirano', start: '2025-07-08', color: colorClaseRegular, classNames: ['fc-event-clase-regular'] },
+                { id: 'cg2', title: 'Transporte pte. grave — Suazo/Lopez', start: '2025-07-11', color: colorClaseRegular, classNames: ['fc-event-clase-regular'] },
+                { id: 'cg3', title: 'USG: Bases y acceso vascular — Soza/Delgado', start: '2025-07-15', color: colorUltrasonido, classNames: ['fc-event-ultrasonido'] },
+                { id: 'cg4', title: 'USG Pulmonar — Arauz/Vanegas', start: '2025-07-18', color: colorUltrasonido, classNames: ['fc-event-ultrasonido'] },
+                { id: 'cg5', title: 'POCUS Cardiaco — Flores/Espinoza', start: '2025-07-22', color: colorUltrasonido, classNames: ['fc-event-ultrasonido'] },
+                { id: 'cg6', title: 'Doppler Transcraneal y VNO — Suazo/Mendoza', start: '2025-07-25', color: colorUltrasonido, classNames: ['fc-event-ultrasonido'] },
+                { id: 'cg7', title: 'Insuf. Respiratoria Aguda — Soza/Manzanarez', start: '2025-07-28', color: colorClaseRegular, classNames: ['fc-event-clase-regular'] },
+                { id: 'cg8', title: 'Ventilación Mecánica — Arauz/Altamirano', start: '2025-08-04', color: colorClaseRegular, classNames: ['fc-event-clase-regular'] },
+                { id: 'cg9', title: 'Balance O2 y Ácido-Base — Flores/Lopez', start: '2025-08-08', color: colorClaseRegular, classNames: ['fc-event-clase-regular'] },
+                { id: 'cg10', title: '1ª Evaluación (Pte. Grave)', start: '2025-08-12', color: colorEvaluacion, classNames: ['fc-event-evaluacion'] },
+                { id: 'cg11', title: 'Choque: Dx y Tto. — Soza/Vanegas', start: '2025-08-15', color: colorClaseRegular, classNames: ['fc-event-clase-regular'] },
+                { id: 'cg12', title: 'Trastornos K+ — Arauz/Espinoza', start: '2025-08-19', color: colorClaseRegular, classNames: ['fc-event-clase-regular'] },
+                { id: 'cg13', title: 'Trastornos Na+ — Flores/Mendoza', start: '2025-08-22', color: colorClaseRegular, classNames: ['fc-event-clase-regular'] },
+                { id: 'cg14', title: 'Intoxicaciones — Suazo/Manzanarez', start: '2025-08-26', color: colorClaseRegular, classNames: ['fc-event-clase-regular'] },
+                { id: 'cg15', title: 'ATLS: Evaluación Inicial — Soza/Altamirano', start: '2025-08-29', color: colorATLS, classNames: ['fc-event-atls'] },
+                { id: 'cg16', title: 'ATLS: Trauma de Tórax — Arauz/Lopez', start: '2025-09-01', color: colorATLS, classNames: ['fc-event-atls'] },
+                { id: 'cg17', title: 'ATLS: Trauma Abdomen — Flores/Delgado', start: '2025-09-05', color: colorATLS, classNames: ['fc-event-atls'] },
+                { id: 'cg18', title: 'ATLS: TEC — Suazo/Vanegas', start: '2025-09-09', color: colorATLS, classNames: ['fc-event-atls'] },
+                { id: 'cg19', title: 'ATLS: Trauma Columna — Soza/Espinoza', start: '2025-09-12', color: colorATLS, classNames: ['fc-event-atls'] },
+                { id: 'cg20', title: '2ª Evaluación Final (Pte. Grave)', start: '2025-09-19', color: colorEvaluacion, classNames: ['fc-event-evaluacion'] },
+            ];
+            
+            const eventosNuevos = [
+                // JULIO
+                // Casos UCI
+                { id: 'caso-jul1', title: 'Caso UCI: Flores', start: '2025-07-07', color: colorCasoUCI, classNames: ['fc-event-caso'] },
+                { id: 'caso-jul2', title: 'Caso UCI: Arauz', start: '2025-07-14', color: colorCasoUCI, classNames: ['fc-event-caso'] },
+                { id: 'caso-jul3', title: 'Caso UCI: Soza', start: '2025-07-21', color: colorCasoUCI, classNames: ['fc-event-caso'] },
+                { id: 'caso-jul4', title: 'Caso UCI: Suazo', start: '2025-07-28', color: colorCasoUCI, classNames: ['fc-event-caso'] },
+                // Artículos
+                { id: 'art-jul1', title: 'Artículo: Arauz', start: '2025-07-08', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art-jul2', title: 'Artículo: Soza', start: '2025-07-11', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art-jul3', title: 'Artículo: Suazo', start: '2025-07-15', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art-jul4', title: 'Artículo: Flores', start: '2025-07-18', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art-jul5', title: 'Artículo: Arauz', start: '2025-07-22', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art-jul6', title: 'Artículo: Soza', start: '2025-07-25', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art-jul7', title: 'Artículo: Suazo', start: '2025-07-29', color: colorArticulo, classNames: ['fc-event-articulo'] },
+
+                // AGOSTO
+                // Casos UCI
+                { id: 'caso-ago1', title: 'Caso UCI: Flores', start: '2025-08-04', color: colorCasoUCI, classNames: ['fc-event-caso'] },
+                { id: 'caso-ago2', title: 'Caso UCI: Arauz', start: '2025-08-11', color: colorCasoUCI, classNames: ['fc-event-caso'] },
+                { id: 'caso-ago3', title: 'Caso UCI: Soza', start: '2025-08-18', color: colorCasoUCI, classNames: ['fc-event-caso'] },
+                { id: 'caso-ago4', title: 'Caso UCI: Suazo', start: '2025-08-25', color: colorCasoUCI, classNames: ['fc-event-caso'] },
+                // Artículos
+                { id: 'art-ago1', title: 'Artículo: Flores', start: '2025-08-05', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art-ago2', title: 'Artículo: Arauz', start: '2025-08-08', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art-ago3', title: 'Artículo: Soza', start: '2025-08-12', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art-ago4', title: 'Artículo: Suazo', start: '2025-08-15', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art-ago5', title: 'Artículo: Flores', start: '2025-08-19', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art-ago6', title: 'Artículo: Arauz', start: '2025-08-22', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art-ago7', title: 'Artículo: Soza', start: '2025-08-26', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art-ago8', title: 'Artículo: Suazo', start: '2025-08-29', color: colorArticulo, classNames: ['fc-event-articulo'] },
+
+                // SEPTIEMBRE
+                // Casos UCI
+                { id: 'caso-sep1', title: 'Caso UCI: Flores', start: '2025-09-01', color: colorCasoUCI, classNames: ['fc-event-caso'] },
+                { id: 'caso-sep2', title: 'Caso UCI: Arauz', start: '2025-09-08', color: colorCasoUCI, classNames: ['fc-event-caso'] },
+                // Artículos
+                { id: 'art-sep1', title: 'Artículo: Flores', start: '2025-09-05', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art-sep2', title: 'Artículo: Arauz', start: '2025-09-09', color: colorArticulo, classNames: ['fc-event-articulo'] },
+                { id: 'art-sep3', title: 'Artículo: Soza', start: '2025-09-12', color: colorArticulo, classNames: ['fc-event-articulo'] },
+            ];
+
+            const eventosNutricion = [
+                { id: 'nutri1', title: 'Nutrición: Intro y Resp. Metabólica — Dr. Manzanares', start: '2025-08-06', color: colorNutricion, classNames: ['nutricion'] },
+                { id: 'nutri2', title: 'Nutrición: Evaluación Nutricional — Dr. Espinoza', start: '2025-08-08', color: colorNutricion, classNames: ['nutricion'] },
+                { id: 'nutri3', title: 'Nutrición: Requerimientos — Dr. Mendoza', start: '2025-08-11', color: colorNutricion, classNames: ['nutricion'] },
+                { id: 'nutri4', title: 'Nutrición: Enteral I — Dr. Atamirano', start: '2025-08-14', color: colorNutricion, classNames: ['nutricion'] },
+                { id: 'nutri5', title: 'Nutrición: Enteral II — Dr. Delgado', start: '2025-08-18', color: colorNutricion, classNames: ['nutricion'] },
+                { id: 'nutri6', title: 'Nutrición: Parenteral — Dr. Vanegas', start: '2025-08-21', color: colorNutricion, classNames: ['nutricion'] },
+                { id: 'nutri7', title: 'Nutrición: Obesidad y Malnutrición — Dr. Manzanarez', start: '2025-08-25', color: colorNutricion, classNames: ['nutricion'] },
+                { id: 'nutri8', title: 'Nutrición: Falla Orgánica — Dr. Espinoza', start: '2025-08-28', color: colorNutricion, classNames: ['nutricion'] },
+                { id: 'nutri9', title: 'Nutrición: Paciente Quirúrgico y Quemado — Dr. Mendoza', start: '2025-09-01', color: colorNutricion, classNames: ['nutricion'] },
+                { id: 'nutri-art-lopez', title: 'Artículo Nutrición: Dr. Lopez', start: '2025-09-04', color: colorArticulo, classNames: ['fc-event-articulo', 'nutricion'] },
+                { id: 'nutri-caso', title: 'Caso Clínico Nutrición', start: '2025-09-08', color: colorCasoUCI, classNames: ['fc-event-caso', 'nutricion'] },
+                { id: 'nutri10', title: 'Nutrición: Examen Final — Dr. Vanegas', start: '2025-09-12', color: colorEvaluacion, classNames: ['fc-event-evaluacion', 'nutricion'] },
+            ];
+
+            const eventosTotales = eventosMayoJunio.concat(eventosEndocrino, eventosCursoGrave, eventosNuevos, eventosNutricion);
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                locale: 'es',
+                initialDate: '2025-05-01',
+                initialView: 'dayGridMonth',
+                weekends: false,
+                navLinks: true,
+                headerToolbar: {
+                    start: 'prev,next today',
+                    center: 'title',
+                    end: 'dayGridMonth,listWeek'
+                },
+                events: eventosTotales,
+                height: 'auto',
+                contentHeight: 'auto',
+                eventDisplay: 'block',
+                dayMaxEvents: true,
+                eventClick: function(info) {
+                    info.jsEvent.preventDefault();
+                    const evento = info.event;
+                    const storageKey = `comment-${evento.id}`;
+                    const comentarioActual = localStorage.getItem(storageKey) || '';
+                    const tituloOriginal = typeof evento.title === 'string' ? evento.title.replace(' 📌', '') : `Evento ID: ${evento.id}`;
+                    const nuevoComentario = prompt(`Comentario para:\n${tituloOriginal}`, comentarioActual);
+                    if (nuevoComentario !== null) {
+                        const comentarioLimpio = nuevoComentario.trim();
+                        let tituloActualizado = tituloOriginal;
+                        if (comentarioLimpio === '') { localStorage.removeItem(storageKey); } 
+                        else {
+                            localStorage.setItem(storageKey, comentarioLimpio);
+                            if (!tituloOriginal.includes(' 📌')) { tituloActualizado += ' 📌'; }
+                        }
+                        evento.setProp('title', tituloActualizado);
+                    }
+                },
+            });
+
+            calendar.render();
+
+            if (exportButton) {
+                exportButton.addEventListener('click', function() {
+                    // Cambiar el texto del botón y deshabilitarlo
+                    exportButton.textContent = 'Exportando...';
+                    exportButton.disabled = true;
+                    
+                    // Ocultar el botón para que no aparezca en el PDF
+                    exportButton.style.display = 'none';
+
+                    // Definir el elemento a capturar y las opciones del PDF
+                    const element = document.body;
+                    const opt = {
+                        margin:       [10, 10, 10, 10],
+                        filename:     'calendario-academico.pdf',
+                        image:        { type: 'jpeg', quality: 0.98 },
+                        html2canvas:  { scale: 2, useCORS: true, letterRendering: true, scrollY: 0, windowWidth: document.documentElement.offsetWidth },
+                        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+                    };
+
+                    // Generar el PDF
+                    html2pdf().from(element).set(opt).save().then(() => {
+                        // Restaurar el botón cuando la exportación termine
+                        exportButton.textContent = 'Exportar a PDF';
+                        exportButton.disabled = false;
+                        exportButton.style.display = 'block';
+                    }).catch(err => {
+                        console.error("Error durante la exportación a PDF:", err);
+                        // Restaurar el botón también si hay un error
+                        exportButton.textContent = 'Error al exportar';
+                        exportButton.disabled = false;
+                        exportButton.style.display = 'block';
+                    });
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
