@@ -87,8 +87,8 @@
                 { id: 'ev22', title: 'Laringoscopia & intubación — Lopez/Soza', start: '2025-06-17' },
                 { id: 'ev23', title: 'Vía aérea quirúrgica — Manzanarez/Arauz', start: '2025-06-20' },
                 // Evaluaciones
-                { id: 'ev17', title: 'Primera evaluación (Reanimación)', start: '2025-06-02', color: colorEvaluacion, classNames: ['fc-event-evaluacion'] }, // <-- MODIFICACIÓN: Nombre
-                { id: 'ev24', title: 'Segunda evaluación (Reanimación)', start: '2025-06-27', color: colorEvaluacion, classNames: ['fc-event-evaluacion'] }, // <-- MODIFICACIÓN: Nombre y Fecha
+                { id: 'ev17', title: 'Primera evaluación (Reanimación)', start: '2025-06-02', color: colorEvaluacion, classNames: ['fc-event-evaluacion'] },
+                { id: 'ev24', title: 'Segunda evaluación (Reanimación)', start: '2025-06-27', color: colorEvaluacion, classNames: ['fc-event-evaluacion'] },
                 // Artículos
                 { id: 'art1', title: 'Artículo: Suazo - CPR Mecánica vs Manual', start: '2025-05-06', color: colorArticulo, classNames: ['fc-event-articulo'] },
                 { id: 'art2', title: 'Artículo: Flores - Acceso IO vs IV', start: '2025-05-09', color: colorArticulo, classNames: ['fc-event-articulo'] },
@@ -104,7 +104,7 @@
                 { id: 'art12', title: 'Artículo: Flores - TTM Update', start: '2025-06-13', color: colorArticulo, classNames: ['fc-event-articulo'] },
                 { id: 'art13', title: 'Artículo: Arauz - Network-Meta Epinefrina', start: '2025-06-17', color: colorArticulo, classNames: ['fc-event-articulo'] },
                 { id: 'art14', title: 'Artículo: Soza - Torniquete Prehosp.', start: '2025-06-20', color: colorArticulo, classNames: ['fc-event-articulo'] },
-                { id: 'art15', title: 'Artículo: Lopez - Revisión de artículo', start: '2025-06-27', color: colorArticulo, classNames: ['fc-event-articulo'] }, // <-- MODIFICACIÓN: Fecha
+                { id: 'art15', title: 'Artículo: Lopez - Revisión de artículo', start: '2025-06-27', color: colorArticulo, classNames: ['fc-event-articulo'] },
                 // Casos UCI
                 { id: 'caso1', title: 'Caso UCI: Lopez', start: '2025-05-12', color: colorCasoUCI, classNames: ['fc-event-caso'] },
                 { id: 'caso2', title: 'Caso UCI: Suazo', start: '2025-05-19', color: colorCasoUCI, classNames: ['fc-event-caso'] },
@@ -198,19 +198,18 @@
                 { id: 'art-sep3', title: 'Artículo: Soza', start: '2025-09-12', color: colorArticulo, classNames: ['fc-event-articulo'] },
             ];
 
+            // NUEVAS FECHAS NUTRICIÓN (alineadas al cronograma 25 Ago – 24 Sep 2025)
             const eventosNutricion = [
-                { id: 'nutri1', title: 'Nutrición: Intro y Resp. Metabólica — Dr. Manzanares', start: '2025-08-06', color: colorNutricion, classNames: ['nutricion'] },
-                { id: 'nutri2', title: 'Nutrición: Evaluación Nutricional — Dr. Espinoza', start: '2025-08-08', color: colorNutricion, classNames: ['nutricion'] },
-                { id: 'nutri3', title: 'Nutrición: Requerimientos — Dr. Mendoza', start: '2025-08-11', color: colorNutricion, classNames: ['nutricion'] },
-                { id: 'nutri4', title: 'Nutrición: Enteral I — Dr. Atamirano', start: '2025-08-14', color: colorNutricion, classNames: ['nutricion'] },
-                { id: 'nutri5', title: 'Nutrición: Enteral II — Dr. Delgado', start: '2025-08-18', color: colorNutricion, classNames: ['nutricion'] },
-                { id: 'nutri6', title: 'Nutrición: Parenteral — Dr. Vanegas', start: '2025-08-21', color: colorNutricion, classNames: ['nutricion'] },
-                { id: 'nutri7', title: 'Nutrición: Obesidad y Malnutrición — Dr. Manzanarez', start: '2025-08-25', color: colorNutricion, classNames: ['nutricion'] },
-                { id: 'nutri8', title: 'Nutrición: Falla Orgánica — Dr. Espinoza', start: '2025-08-28', color: colorNutricion, classNames: ['nutricion'] },
-                { id: 'nutri9', title: 'Nutrición: Paciente Quirúrgico y Quemado — Dr. Mendoza', start: '2025-09-01', color: colorNutricion, classNames: ['nutricion'] },
-                { id: 'nutri-art-lopez', title: 'Artículo Nutrición: Dr. Lopez', start: '2025-09-04', color: colorArticulo, classNames: ['fc-event-articulo', 'nutricion'] },
-                { id: 'nutri-caso', title: 'Caso Clínico Nutrición', start: '2025-09-08', color: colorCasoUCI, classNames: ['fc-event-caso', 'nutricion'] },
-                { id: 'nutri10', title: 'Nutrición: Examen Final — Dr. Vanegas', start: '2025-09-12', color: colorEvaluacion, classNames: ['fc-event-evaluacion', 'nutricion'] },
+                { id: 'nutri1', title: 'Nutrición: Intro y Resp. Metabólica — Dr. Manzanares', start: '2025-08-25', color: colorNutricion, classNames: ['nutricion'] },
+                { id: 'nutri2', title: 'Nutrición: Evaluación Nutricional — Dr. Espinoza', start: '2025-08-27', color: colorNutricion, classNames: ['nutricion'] },
+                { id: 'nutri3', title: 'Nutrición: Requerimientos — Dr. Mendoza', start: '2025-08-29', color: colorNutricion, classNames: ['nutricion'] },
+                { id: 'nutri4', title: 'Nutrición: Enteral I — Dr. Atamirano', start: '2025-09-01', color: colorNutricion, classNames: ['nutricion'] },
+                { id: 'nutri5', title: 'Nutrición: Enteral II — Dr. Delgado', start: '2025-09-05', color: colorNutricion, classNames: ['nutricion'] },
+                { id: 'nutri6', title: 'Nutrición: Parenteral — Dr. Vanegas', start: '2025-09-08', color: colorNutricion, classNames: ['nutricion'] },
+                { id: 'nutri7', title: 'Nutrición: Obesidad y Malnutrición — Dr. Manzanarez', start: '2025-09-11', color: colorNutricion, classNames: ['nutricion'] },
+                { id: 'nutri8', title: 'Nutrición: Falla Orgánica — Dr. Espinoza', start: '2025-09-17', color: colorNutricion, classNames: ['nutricion'] },
+                { id: 'nutri9', title: 'Nutrición: Paciente Quirúrgico y Quemado — Dr. Mendoza', start: '2025-09-19', color: colorNutricion, classNames: ['nutricion'] },
+                { id: 'nutri10', title: 'Nutrición: Examen Final — Dr. Vanegas', start: '2025-09-24', color: colorEvaluacion, classNames: ['fc-event-evaluacion', 'nutricion'] },
             ];
 
             const eventosTotales = eventosMayoJunio.concat(eventosEndocrino, eventosCursoGrave, eventosNuevos, eventosNutricion);
